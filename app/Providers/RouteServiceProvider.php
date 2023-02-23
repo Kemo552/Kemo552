@@ -50,6 +50,10 @@ class RouteServiceProvider extends ServiceProvider
                 Route::prefix('doctor')
                 ->namespace(App\Http\DoctorController::class)
                 ->group(base_path('routes/doctor.php'));
+
+                Route::prefix('patient')
+                ->namespace(App\Http\PatientController::class)
+                ->group(base_path('routes/patient.php'));
         });
     }
 
