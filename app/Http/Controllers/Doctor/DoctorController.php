@@ -10,11 +10,13 @@ use App\Models\Doctor;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class DoctorController extends Controller
 {
     use GeneralTraits;
-    public function test(){
+    public function test()
+    {
         return $this->returnSuccess('connected', 'no data');
     }
 
@@ -28,11 +30,11 @@ class DoctorController extends Controller
             $token = $doctor->createToken('Register|' . $doctor->doctor_code)->plainTextToken;
             return $this->returnData('Successfully registered', $doctor, 'token', $token, 201);
         } catch (Exception $ex) {
-            return $this->returnException('Something went wrong!', $ex);
+            return $this->returnException('Something went wrong!', $ex->getMessage());
         }
     }
 
-    // --- Log-in
+    // --- Logging-in
     public function login(DoctorLoginRequest $login)
     {
         $credentials = $login->only(['email', 'password']);
@@ -40,12 +42,22 @@ class DoctorController extends Controller
             try {
                 /** @var App\Models\Doctor */
                 $doctor = Auth::guard('doctor')->user();
-                $token = $doctor->createToken('Login|' . $doctor->doctor_code)->plainTextToken;
+                $token = Auth::guard('doctor')->attempt($credentials); //$doctor->createToken('Login|' . $doctor->doctor_code)->plainTextToken;
                 return $this->returnData('Successfully loged-in', $credentials['email'], 'token', $token);
             } catch (Exception $ex) {
-                return $this->returnException('Someting went wrong!', $ex);
+                return $this->returnException('Someting went wrong!', $ex->getMessage());
             }
         }
         return $this->returnUnauthorized('Unauthorized | Credentials not valid');
+    }
+
+    // --- Logging-out
+    public function logout(Request $logout)
+    {
+        $token = $logout->header('auth-token');
+        if ($token) {
+            JWTAuth::setToken($token)->invalidate();
+            return $this->returnSuccess('Successfully logged out', 'no data');
+        } else return $this->returnNotFound('Token not found!');
     }
 }
