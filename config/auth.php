@@ -50,6 +50,11 @@ return [
             'driver' => 'jwt',
             'provider' => 'doctors',
         ],
+
+        'patient' => [
+            'driver' => 'jwt',
+            'provider' => 'patients',
+        ],
     ],
 
     /*
@@ -78,6 +83,11 @@ return [
         'doctors' => [
             'driver' => 'eloquent',
             'model' => App\Models\Doctor::class,
+        ],
+
+        'patients' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Patient::class,
         ],
         // 'users' => [
         //     'driver' => 'database',
