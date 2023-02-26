@@ -1,8 +1,8 @@
-1. Logout method: Doctor, Patient
-2. Get all medical reports, and find a way to get only those whose related to the authenticated user: PatientController
+1. Logout method: Doctor, Patient // Done
+2. Get all medical reports, and find a way to get only those whose are related to the authenticated user: PatientController
 3. Fix assign-guard to let it check if token is related to a doctor or user // Done
 4. Add method to get the profile of User and Doctor // Done
 5. Create an Appointment model with its other files
 6. Connect between tables in Database {one Doctor has many Appointments} {one Patient has many Appointments, and one Medical Report}
 7. If status of an appointment is {finished} then we don't need to return it when using a filter to get futur appointments
-8. Fix how to get all
+8. Add an image model for profile images
