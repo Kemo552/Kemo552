@@ -60,8 +60,12 @@ class PatientController extends Controller
     {
         $token = $logout->header('auth-token');
         if ($token) {
-            JWTAuth::setToken($token)->invalidate();
-            return $this->returnSuccess('Successfully logged out', 'no data');
+            try {
+                JWTAuth::setToken($token)->invalidate();
+                return $this->returnSuccess('Successfully logged out', 'no data');
+            } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $ex) {
+                return $this->returnNotFound('Invalid Token');
+            }
         } else return $this->returnNotFound('Token not found!');
     }
 
